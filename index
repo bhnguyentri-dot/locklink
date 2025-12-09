@@ -2,7 +2,7 @@
     /* tên yêu cầu của biến đó password */
     const password = "686868"; // **THAY BẰNG MẬT KHẨU CỦA BẠN**
     /* tên yêu cầu của biến đó targetURL */
-    const targetURL = "https://bhnguyentri-dot.github.io/bhslt26/"; // **THAY BẰNG LINK GỐC CỦA BẠN**
+    const targetURL = "https://lichtuanbhs.netlify.app/"; // **THAY BẰNG LINK GỐC CỦA BẠN**
     /* tên yêu cầu của biến đó user */
     const user = prompt("Vui lòng nhập mật khẩu để truy cập:");
 
