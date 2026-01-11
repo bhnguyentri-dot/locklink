@@ -58,32 +58,36 @@
 
         timer = setTimeout(function() {
             if (!isRedirecting) {
-                forceFail("Đã hết thời gian (10s)! Đang chuyển hướng...");
+                showErrorAndRedirect("Hết giờ (10s)! Đang chuyển hướng...");
             }
         }, timeLimit);
     };
 
     function checkPassword() {
         if (isRedirecting) return;
+        clearTimeout(timer);
 
         const input = document.getElementById("nt-password-input").value;
         const msg = document.getElementById("nt-message");
 
         if (input === password) {
             isRedirecting = true;
-            clearTimeout(timer);
             msg.style.color = "green";
-            msg.innerText = "Mật khẩu đúng! Đang truy cập...";
+            msg.innerText = "Mật khẩu đúng! Đang vào...";
             window.location.href = targetURL;
         } else {
             mistakes++;
             if (mistakes >= maxMistakes) {
-                forceFail("Sai quá 5 lần! Từ chối truy cập...");
+                showErrorAndRedirect("Sai quá 5 lần! Đang chuyển hướng...");
             } else {
                 msg.style.color = "red";
-                msg.innerText = `Mật khẩu sai! Còn ${maxMistakes - mistakes} lần thử.`;
+                msg.innerText = `Sai! Còn ${maxMistakes - mistakes} lần thử.`;
                 document.getElementById("nt-password-input").value = "";
                 document.getElementById("nt-password-input").focus();
+                
+                timer = setTimeout(function() {
+                    if (!isRedirecting) showErrorAndRedirect("Thao tác chậm! Đang chuyển hướng...");
+                }, timeLimit);
             }
         }
     }
@@ -92,13 +96,16 @@
         window.location.href = failURL;
     }
 
-    function forceFail(message) {
+    function showErrorAndRedirect(text) {
         isRedirecting = true;
-        clearTimeout(timer);
-        document.getElementById("nt-message").innerText = message;
+        const msg = document.getElementById("nt-message");
+        msg.style.color = "red";
+        msg.innerText = text;
+        
         document.getElementById("nt-password-input").disabled = true;
         document.getElementById("nt-btn-ok").disabled = true;
-        
+        document.getElementById("nt-btn-cancel").disabled = true;
+
         setTimeout(function() {
             window.location.href = failURL;
         }, 1500);
