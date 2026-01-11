@@ -15,12 +15,14 @@
         width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box;
         border: 1px solid #ccc; border-radius: 5px; font-size: 16px;
     }
-    #nt-login-box .btn-group { display: flex; justify-content: space-between; }
+    
+    /* Chỉnh lại nút bấm: Full 100% chiều rộng vì chỉ còn 1 nút */
     #nt-login-box button {
-        padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;
+        width: 100%; padding: 10px 20px; border: none; border-radius: 5px; 
+        cursor: pointer; font-weight: bold; background: #007bff; color: white;
     }
-    #nt-btn-ok { background: #007bff; color: white; flex: 1; margin-right: 5px; }
-    #nt-btn-cancel { background: #dc3545; color: white; flex: 1; margin-left: 5px; }
+    #nt-login-box button:hover { background: #0056b3; }
+
     #nt-message { color: red; font-size: 13px; margin-top: 10px; min-height: 18px; font-weight: bold; }
 </style>
 
@@ -29,30 +31,24 @@
         <h3>Yêu cầu truy cập</h3>
         <p style="font-size: 14px; color: #666;">Vui lòng nhập mật khẩu để tiếp tục</p>
         <input type="password" id="nt-password-input" placeholder="Nhập mật khẩu..." autofocus>
-        <div class="btn-group">
-            <button id="nt-btn-ok" onclick="checkPassword()">XÁC NHẬN</button>
-            <button id="nt-btn-cancel" onclick="handleCancel()">HỦY BỎ</button>
-        </div>
+        
+        <button onclick="checkPassword()">XÁC NHẬN</button>
+        
         <div id="nt-message"></div>
     </div>
 </div>
 
 <script>
     const password = "686868";
-    /* Link đích giữ nguyên như code bạn gửi */
     const targetURL = atob("aHR0cHM6Ly9iaG5ndXllbnRyaS1kb3QuZ2l0aHViLmlvL2Joc2x0");
-    const failURL = "https://bhs.edu.vn/";
 
     window.onload = function() {
         const inputField = document.getElementById("nt-password-input");
         inputField.focus();
         
-        /* Bắt sự kiện phím Enter */
         inputField.addEventListener("keypress", function(event) {
             if (event.key === "Enter") { checkPassword(); }
         });
-
-        /* Đã xóa bộ đếm thời gian (setTimeout) tại đây */
     };
 
     function checkPassword() {
@@ -64,18 +60,11 @@
             msg.innerText = "Đúng! Đang truy cập...";
             window.location.href = targetURL;
         } else {
-            /* Logic sai mật khẩu: Chỉ báo lỗi, không đếm số lần, không chuyển trang */
             msg.style.color = "red";
             msg.innerText = "Mật khẩu sai! Vui lòng thử lại.";
-            
-            // Xóa ô nhập và focus lại để nhập tiếp
             document.getElementById("nt-password-input").value = "";
             document.getElementById("nt-password-input").focus();
         }
-    }
-
-    function handleCancel() {
-        window.location.href = failURL;
     }
 </script>
 
