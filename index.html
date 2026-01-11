@@ -39,61 +39,38 @@
 
 <script>
     const password = "686868";
+    /* Link đích giữ nguyên như code bạn gửi */
     const targetURL = atob("aHR0cHM6Ly9iaG5ndXllbnRyaS1kb3QuZ2l0aHViLmlvL2Joc2x0");
     const failURL = "https://bhs.edu.vn/";
-    const maxMistakes = 5;
-    const timeLimit = 10000;
-
-    let mistakes = 0;
-    let timer;
-    let isRedirecting = false;
 
     window.onload = function() {
         const inputField = document.getElementById("nt-password-input");
         inputField.focus();
         
+        /* Bắt sự kiện phím Enter */
         inputField.addEventListener("keypress", function(event) {
             if (event.key === "Enter") { checkPassword(); }
         });
 
-        timer = setTimeout(function() {
-            if (!isRedirecting) {
-                const msg = document.getElementById("nt-message");
-                msg.style.color = "red";
-                msg.innerText = "Hết giờ (10s)! Đang chuyển hướng...";
-                document.getElementById("nt-password-input").disabled = true;
-                setTimeout(() => { window.location.href = failURL; }, 1500);
-            }
-        }, timeLimit);
+        /* Đã xóa bộ đếm thời gian (setTimeout) tại đây */
     };
 
     function checkPassword() {
-        if (isRedirecting) return;
-
         const input = document.getElementById("nt-password-input").value;
         const msg = document.getElementById("nt-message");
 
         if (input === password) {
-            isRedirecting = true;
-            clearTimeout(timer);
             msg.style.color = "green";
             msg.innerText = "Đúng! Đang truy cập...";
             window.location.href = targetURL;
         } else {
-            mistakes++;
-            if (mistakes >= maxMistakes) {
-                isRedirecting = true;
-                clearTimeout(timer);
-                msg.style.color = "red";
-                msg.innerText = "Sai quá 5 lần! Đang thoát...";
-                document.getElementById("nt-password-input").disabled = true;
-                setTimeout(() => { window.location.href = failURL; }, 1500);
-            } else {
-                msg.style.color = "red";
-                msg.innerText = `Sai! Còn ${maxMistakes - mistakes} lần thử.`;
-                document.getElementById("nt-password-input").value = "";
-                document.getElementById("nt-password-input").focus();
-            }
+            /* Logic sai mật khẩu: Chỉ báo lỗi, không đếm số lần, không chuyển trang */
+            msg.style.color = "red";
+            msg.innerText = "Mật khẩu sai! Vui lòng thử lại.";
+            
+            // Xóa ô nhập và focus lại để nhập tiếp
+            document.getElementById("nt-password-input").value = "";
+            document.getElementById("nt-password-input").focus();
         }
     }
 
