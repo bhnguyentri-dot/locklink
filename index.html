@@ -1,30 +1,64 @@
 <script>
-    /* tên yêu cầu của biến đó password */
+    /* --- CẤU HÌNH HỆ THỐNG --- */
+    
+    /* mật khẩu truy cập */
     const password = "686868"; // **THAY BẰNG MẬT KHẨU CỦA BẠN**
-    /* tên yêu cầu của biến đó targetURL */
-    const targetURL = "https://bhnguyentri-dot.github.io/bhslt"; // **THAY BẰNG LINK GỐC CỦA BẠN**
-    /* tên yêu cầu của biến đó user */
-    const user = prompt("Vui lòng nhập mật khẩu để truy cập:");
+    
+    const targetURL = atob("aHR0cHM6Ly9iaG5ndXllbnRyaS1kb3QuZ2l0aHViLmlvL2Joc2x0"); 
+    
+    /* link chuyển đến khi thất bại (Hủy / Sai quá 5 lần / Quá 5 giây) */
+    const failURL = "http://bhs.edu.vn/"; // **THAY BẰNG LINK BẠN MUỐN**
 
-    if (user === password) {
-        window.location.href = targetURL;
-    } else {
-        alert("Mật khẩu không đúng. Truy cập bị từ chối.");
+    /* Cấu hình giới hạn */
+    const maxMistakes = 5; // Số lần cho phép nhập sai
+    const timeLimit = 5000; // Thời gian cho phép (5000ms = 5 giây)
+
+    /* --- LOGIC XỬ LÝ (KHÔNG THAY ĐỔI CẤU TRÚC GIAO DIỆN) --- */
+    
+    let mistakes = 0; // Biến đếm số lần sai
+    let isSuccess = false; // Trạng thái thành công
+    const startTime = Date.now(); // Ghi lại thời gian bắt đầu
+
+    // Vòng lặp kiểm tra mật khẩu
+    while (mistakes < maxMistakes) {
+        // Kiểm tra thời gian trước khi hiện prompt (nếu code chạy lại)
+        if (Date.now() - startTime > timeLimit) {
+            alert("Đã quá thời gian cho phép (5 giây)!");
+            window.location.href = failURL;
+            break; 
+        }
+
+        let user = prompt(`Vui lòng nhập mật khẩu (Lần thử: ${mistakes + 1}/${maxMistakes}):`);
+
+        // Logic 1: Người dùng bấm Hủy
+        if (user === null) {
+            window.location.href = failURL;
+            break;
+        }
+
+        // Logic 2: Kiểm tra lại thời gian sau khi bấm OK (chặn treo prompt)
+        if (Date.now() - startTime > timeLimit) {
+            alert("Thao tác quá chậm! Đã quá 5 giây.");
+            window.location.href = failURL;
+            break;
+        }
+
+        // Logic 3: Kiểm tra mật khẩu
+        if (user === password) {
+            isSuccess = true;
+            window.location.href = targetURL; // Link đã được giải mã tự động ở trên
+            break; // Thoát vòng lặp
+        } else {
+            mistakes++; // Tăng số lần sai
+            if (mistakes >= maxMistakes) {
+                alert("Bạn đã nhập sai quá 5 lần. Truy cập bị từ chối.");
+                window.location.href = failURL;
+            } else {
+                alert(`Mật khẩu sai! Bạn còn ${maxMistakes - mistakes} lần thử.`);
+            }
+        }
     }
     /* nơi kết thúc kiểm tra */
 </script>
 
 <h1>Vui lòng F5 tải lại trang nhập mật khẩu...</h1>
-
-
-
-
-
-
-
-
-
-
-
-
-
